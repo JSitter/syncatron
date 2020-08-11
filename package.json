@@ -1,8 +1,8 @@
 {
-  "name": "cra-electron",
-  "description": "CRA + Electron sitting in a tree",
-  "author": "Kitze",
-  "version": "0.2.7",
+  "name": "syncatron",
+  "description": "Sync a local folder with a remote directory using SFTP.",
+  "author": "Justin Sitter",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "cross-env": "6.0.2",
@@ -13,7 +13,7 @@
     "update-electron-app": "^1.2.0"
   },
   "devDependencies": {
-    "concurrently": "4.1.2",
+    "concurrently": "^5.3.0",
     "electron": "6.0.11",
     "electron-builder": "^21.2.0",
     "prettier": "^1.4.4",

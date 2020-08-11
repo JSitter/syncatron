@@ -8,8 +8,8 @@ const isDev = require("electron-is-dev");
 let mainWindow;
 
 require("update-electron-app")({
-  repo: "kitze/react-electron-example",
-  updateInterval: "1 hour"
+  repo: "jsitter/syncatron",
+  updateInterval: "12 hour"
 });
 
 function createWindow() {
