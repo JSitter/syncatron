@@ -1,4 +1,8 @@
+// Temporary Dev Dependency
+require('dotenv').config()
+
 const electron = require("electron");
+var SFTPClient = require('sftp-promises');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
@@ -12,8 +16,18 @@ require("update-electron-app")({
   updateInterval: "12 hour"
 });
 
+function secureConnect(host, username, password) {
+  const config = {host, username, password};
+  var sftp = new SFTPClient(config);
+  console.log("host", process.env.host);
+  console.log(sftp)
+  sftp.ls('public_html').then(function(list) { console.log("list", list) }).catch((err) => console.log("err", err))
+}
+
+
 function createWindow() {
   mainWindow = new BrowserWindow({ width: 900, height: 680, webPreferences: { nodeIntegration: true }});
+  secureConnect(process.env.host, process.env.username, process.env.password);
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
