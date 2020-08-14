@@ -1,8 +1,10 @@
 // Temporary Dev Dependency
-require('dotenv').config()
+require('dotenv').config();
 
+const keytar = require('keytar');
 const electron = require("electron");
-var SFTPClient = require('sftp-promises');
+const {ipcMain} = require("electron");
+const SFTPClient = require('sftp-promises');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
@@ -24,10 +26,33 @@ function secureConnect(host, username, password) {
   sftp.ls('public_html').then(function(list) { console.log("list", list) }).catch((err) => console.log("err", err))
 }
 
+function getSavedConnections() {
+  keytar.findCredentials('Syncatron').then((creds)=>{
+    return creds;
+  }).catch(err=>{
+    console.log(err);
+    return err;
+  });
+}
+
+function saveConnection(hostname, username, password) {
+  keytar.setPassword('Syncatron', username + '@' + hostname, password);
+}
+
+ipcMain.on('get-hosts', (event, arg) => {
+  console.log(arg);
+  event.reply('host-list', 'getSavedConnections()');
+});
+
+ipcMain.on('save-host', (event, host) => {
+  console.log(host);
+});
 
 function createWindow() {
   mainWindow = new BrowserWindow({ width: 900, height: 680, webPreferences: { nodeIntegration: true }});
-  secureConnect(process.env.host, process.env.username, process.env.password);
+  // secureConnect(process.env.host, process.env.username, process.env.password);
+  // keytar.setPassword('KeytarTest', 'AccountName', 'secret');
+  
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
@@ -39,6 +64,7 @@ function createWindow() {
 app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
+  console.log(process.platform)
   if (process.platform !== "darwin") {
     app.quit();
   }
