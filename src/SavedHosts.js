@@ -18,7 +18,7 @@ function displayHosts(hosts) {
         hostComponents.push(Host(hosts[i]));
     }
     if(hostComponents.length === 0){
-        return "No Saved Hosts"
+        return (<p>No Saved Hosts</p>)
     }
     return hostComponents;
 }

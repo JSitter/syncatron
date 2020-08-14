@@ -49,7 +49,7 @@ export default function AddHost(props) {
                     value={password}>
                 </input>
             </label>
-            <p onClick={toggleShowPassword}>Show Password</p>
+            <p className="interactive" onClick={toggleShowPassword}>{showPassword === "password"? "Show" : "Hide"} Password</p>
             <button type='submit' onClick={formSubmission}>Save Host</button>
             <button type='button' onClick={props.cancel}>Cancel</button>
         </form>
