@@ -9,11 +9,10 @@ function Host(hostname) {
         <div>
             <p>{hostname}</p>
         </div>
-    )
+    );
 }
 
 function displayHosts(hosts) {
-    
     let hostComponents = [];
     for( let i = 0; i < hosts.length; i++) {
         hostComponents.push(Host(hosts[i].account));
@@ -29,14 +28,15 @@ export default function SavedHosts() {
         setAddHost(false);
     }
 
-
 function addNewHost(hostname, username, password) {
     let hostBundle = {hostname, username, password}
+
     ipcRenderer.send('save-host', hostBundle);
+
     ipcRenderer.on('host-save-complete', ()=>{
         ipcRenderer.send('get-hosts')
         setAddHost(false);
-    })
+    });
 }
 
     useEffect(()=>{
@@ -45,7 +45,8 @@ function addNewHost(hostname, username, password) {
     
     ipcRenderer.on('host-list', (event, serverList) => {
         setHosts(serverList);
-    })
+    });
+
     return (
         <section>
             <h1>Hosts</h1>
@@ -57,5 +58,5 @@ function addNewHost(hostname, username, password) {
                             </p> }
             { displayHosts(hosts) }
         </section>
-    )
+    );
 }
