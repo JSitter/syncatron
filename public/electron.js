@@ -1,9 +1,6 @@
-// Temporary Dev Dependency
-require('dotenv').config();
-
 const keytar = require('keytar');
-const electron = require("electron");
-const {ipcMain} = require("electron");
+const electron = require('electron');
+const {ipcMain} = require('electron');
 const SFTPClient = require('sftp-promises');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -21,37 +18,34 @@ require("update-electron-app")({
 function secureConnect(host, username, password) {
   const config = {host, username, password};
   var sftp = new SFTPClient(config);
-  console.log("host", process.env.host);
   console.log(sftp)
   sftp.ls('public_html').then(function(list) { console.log("list", list) }).catch((err) => console.log("err", err))
 }
 
 function getSavedConnections() {
-  keytar.findCredentials('Syncatron').then((creds)=>{
-    return creds;
-  }).catch(err=>{
-    console.log(err);
-    return err;
-  });
+  return keytar.findCredentials('Syncatron')
 }
 
-function saveConnection(hostname, username, password) {
-  keytar.setPassword('Syncatron', username + '@' + hostname, password);
+function saveConnection(event, hostname, username, password) {
+  keytar.setPassword('Syncatron', username + '@' + hostname, password)
+    .then(()=>{
+      event.reply('host-save-complete', 'complete');
+    }).catch(err=>console.log(err));
 }
 
 ipcMain.on('get-hosts', (event, arg) => {
-  console.log(arg);
-  event.reply('host-list', 'getSavedConnections()');
+  getSavedConnections().then((values)=>{
+    event.reply('host-list', values);
+  })
 });
 
-ipcMain.on('save-host', (event, host) => {
-  console.log(host);
+ipcMain.on('save-host', (event, creds) => {
+  saveConnection(event, creds.hostname, creds.username, creds.password);
 });
 
 function createWindow() {
   mainWindow = new BrowserWindow({ width: 900, height: 680, webPreferences: { nodeIntegration: true }});
   // secureConnect(process.env.host, process.env.username, process.env.password);
-  // keytar.setPassword('KeytarTest', 'AccountName', 'secret');
   
   mainWindow.loadURL(
     isDev
