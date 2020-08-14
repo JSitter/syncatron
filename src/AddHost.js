@@ -21,7 +21,7 @@ export default function AddHost(props) {
     }
 
     return (
-        <form>
+        <form className="add-host-form">
             <label htmlFor='hostname'>Host Name
                 <input 
                     type='text' 

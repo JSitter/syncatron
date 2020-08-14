@@ -1,0 +1,17 @@
+.add-host-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.add-host-form > label > input {
+    margin: 10px;
+    font-size: 15pt;
+    padding: 10px;
+}
+
+button {
+    padding: 10px;
+    font-size: 15pt;
+    margin: 10px;
+}
